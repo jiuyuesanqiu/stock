@@ -19,4 +19,26 @@
 	@import "common/weui.wxss";
 	@import "common/bootstrap.wxss";
 	@import "common/vant.css";
+	
+	.whCenter{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.wCenter{
+		display: flex;
+		justify-content: center;
+	}
+	.hCenter{
+		display: flex;
+		align-items: center;
+	}
+	.hFlex{
+		flex-direction: column;
+	}
+	.wFlex{
+		flex-direction: row;
+	}
+	
+	
 </style>
