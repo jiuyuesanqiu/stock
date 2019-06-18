@@ -20,17 +20,21 @@
 			</view>
 		</view>
 		
-		<view class="whCenter pl-2 pr-2 pb-3" v-for="(item,index) in tableList" :key="index" style="background: #fff;color: #333333;">
-			<view class="hCenter pt-1 pb-1 border-bottom1" style="flex: 2;">{{item.number}}</view>
-			<view class="hCenter pt-1 pb-1  border-bottom1" style="flex: 2;">{{item.name}}</view>
-			<view class="whCenter pt-1 pb-1  border-bottom1" style="flex: 1.5;color: #444;font-size: 30upx;">{{item.currentPrice}}</view>
-			<view class="whCenter pt-1 pb-1  border-bottom1" style="flex: 2;">{{item.peg}}</view>
-			<!-- <view class="whCenter pt-1 pb-1  border-bottom" style="flex: 1.5;">{{item.isLow}}</view> -->
-			<view class="whCenter pt-1 pb-1  border-bottom1" style="flex: 1.5;font-size: 30upx;">
+		<view class="whCenter pl-2 pr-2" v-for="(item,index) in tableList" :key="index" style="background: #fff;color: #333333;">
+			<view class="hCenter pt-3 pb-3 border-bottom1" style="flex: 2;font-size: 30upx;">{{item.number}}</view>
+			<view class="hCenter pt-3 pb-3  border-bottom1" style="flex: 2;font-size: 30upx;">{{item.name}}</view>
+			<view class="whCenter pt-3 pb-3  border-bottom1" style="flex: 1.5;color: #444;font-size: 30upx;">{{item.currentPrice}}</view>
+			<view class="whCenter pt-3 pb-3  border-bottom1" style="flex: 2;font-size: 30upx;">{{item.peg}}</view>
+			<!-- <view class="whCenter pt-3 pb-3  border-bottom" style="flex: 1.5;">{{item.isLow}}</view> -->
+			<view class="whCenter pt-3 pb-3  border-bottom1" style="flex: 1.5;font-size: 30upx;">
 				<view v-if="item.peg<1" style="color:red">是</view>
 				<view v-else-if="item.peg==1">合理</view>
 				<view v-else>否</view>
 			</view>
+		</view>
+		<view class="whCenter hFlex pt-3 pb-1" style="color: #ADAEAA;line-height: 44upx;">
+			<p>— 数据由A股估值分析团队整理提供 —</p>
+			<p>估值数据仅供参考，不构成任何投资建议，投资需谨慎。</p>
 		</view>
 		
 	</view>
