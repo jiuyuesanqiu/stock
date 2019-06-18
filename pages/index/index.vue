@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		
-			<view class="pl-2 pr-2 border-bottom1" style="font-size: 24upx;background: #fff;color: #999;height: 72upx;width: 100%;position: fixed;line-height: 72upx;">
+			<view class="pl-2 pr-2 border-bottom1" style="font-size: 28upx;background: #fff;color: #999;height: 72upx;width: 100%;position: fixed;line-height: 72upx;">
 				<view class="pl-5" style="width: 33.33%;display: inline-block;">股票名称</view>
 				<view class="pr-1" style="width: 33.33%;display: inline-block;text-align: right;">当前价格</view>
 				<view class="pl-3" style="width: 33.33%;display: inline-block;text-align: center;">高/低估</view>
@@ -12,7 +12,7 @@
 			<view class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in tableList" :key="index" style="background: #fff;color: #333333;">
 				<view class="wCenter hFlex pl-5" style="flex: 1;font-size: 30upx;align-items: flex-start;height: 100upx;">
 					<view class="hCenter" style="font-size: 30upx;">{{item.name}}</view>
-					<view class="hCenter" style="font-size: 20upx;color: #999;">{{item.number}}</view>
+					<view class="hCenter" style="font-size: 24upx;color: #999;">{{item.number}}</view>
 				</view>
 				<view v-if="item.peg<1" class="hCenter pr-5" style="flex: 1;color: red;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
 				<view v-else class="hCenter pr-5" style="flex: 1;color: #39B54A;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
