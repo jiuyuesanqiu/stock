@@ -19,7 +19,7 @@
 	@import "common/weui.wxss";
 	@import "common/bootstrap.wxss";
 	@import "common/vant.css";
-	
+
 	.whCenter{
 		display: flex;
 		justify-content: center;
