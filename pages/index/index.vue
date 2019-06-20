@@ -1,25 +1,28 @@
 <template>
 	<view class="page">
-		
-			<view class="pl-2 pr-2 border-bottom1" style="font-size: 28upx;background: #fff;color: #999;height: 72upx;width: 100%;position: fixed;line-height: 72upx;">
+		<view style="position: fixed;font-size: 28upx;background: #fff;color: #999;width: 100%;">
+			<view class="pl-2 pr-2 border-bottom1" style="height: 72upx;line-height: 72upx;">
 				<view class="pl-5" style="width: 33.33%;display: inline-block;">股票名称</view>
 				<view class="pr-1" style="width: 33.33%;display: inline-block;text-align: right;">当前价格</view>
 				<view class="pl-3" style="width: 33.33%;display: inline-block;text-align: center;">高/低估</view>
 			</view>
-	
-		
-		<view class="" style="padding-top: 73upx;">
-			<view class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in tableList" :key="index" style="background: #fff;color: #333333;">
-				<view class="wCenter hFlex pl-5" style="flex: 1;font-size: 30upx;align-items: flex-start;height: 100upx;">
-					<view class="hCenter" style="font-size: 30upx;">{{item.name}}</view>
-					<view class="hCenter" style="font-size: 24upx;color: #999;">{{item.number}}</view>
+			<view class="whCenter border-bottom1" style="color: #999999;">
+				<text class="whCenter" style="height: 60upx;font-size: 26upx;">数据更新于<text>06-20 22:26</text></text>
+			</view>
+		</view>
+
+		<view class="" style="padding-top: 132upx;">
+			<view class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in tableList" :key="index" style="background: #fff;color: #333333;font-weight: bold;">
+				<view class="wCenter hFlex pl-5" style="flex: 1;font-size: 30upx;align-items: flex-start;height: 100upx;line-height: 40upx;">
+					<view class="hCenter" style="font-size: 34upx;color: #333333;">{{item.name}}</view>
+					<view class="hCenter" style="font-size: 24upx;color: #a3a3a3;">{{item.number}}</view>
 				</view>
-				<view v-if="item.peg<1" class="hCenter pr-5" style="flex: 1;color: red;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
-				<view v-else class="hCenter pr-5" style="flex: 1;color: #39B54A;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
+				<view v-if="item.peg<1" class="hCenter pr-5" style="flex: 1;color: #E93030;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
+				<view v-else class="hCenter pr-5" style="flex: 1;color: #009900;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
 				<view class="whCenter" style="flex: 1;font-size: 36upx;">
-					<view v-if="item.peg<1" style="color:red">低估</view>
+					<view v-if="item.peg<1" style="color:#E93030">低估</view>
 					<view v-else-if="item.peg==1">合理</view>
-					<view v-else style="color: #39B54A;">高估</view>
+					<view v-else style="color: #009900;">高估</view>
 				</view>
 			</view>
 		</view>
