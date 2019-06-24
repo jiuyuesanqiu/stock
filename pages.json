@@ -6,6 +6,10 @@
 				"navigationBarTitleText": "股票估值助手"
 			}
 		}
+        ,{
+            "path" : "pages/search/search",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

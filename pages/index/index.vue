@@ -1,13 +1,16 @@
 <template>
 	<view class="page">
 		<view style="position: fixed;font-size: 28upx;background: #fff;color: #999;width: 100%;">
+			<view class="cu-bar search bg-white" @tap="search">
+				<view class="search-form round">
+					<text class="cuIcon-search"></text>
+					<input placeholder="请输入股票名称或代码" disabled></input>
+				</view>
+			</view>
 			<view class="pl-2 pr-2 border-bottom1" style="height: 72upx;line-height: 72upx;">
 				<view class="pl-5" style="width: 33.33%;display: inline-block;">股票名称</view>
 				<view class="pr-1" style="width: 33.33%;display: inline-block;text-align: right;">当前价格</view>
 				<view class="pl-3" style="width: 33.33%;display: inline-block;text-align: center;">高/低估</view>
-			</view>
-			<view class="whCenter border-bottom1" style="color: #999999;">
-				<text class="whCenter" style="height: 60upx;font-size: 26upx;">数据更新于<text>2019年6月24日</text></text>
 			</view>
 		</view>
 
@@ -29,7 +32,6 @@
 			<p>— 数据由A股估值分析团队整理提供 —</p>
 			<p>估值数据仅供参考，不构成任何投资建议，投资需谨慎。</p>
 		</view>
-
 	</view>
 </template>
 
@@ -38,47 +40,59 @@
 		data() {
 			return {
 				titles: ['股票代码', '股票名称', '当前价格', 'PEG', '是否低估'],
-				quoteList:[],
+				quoteList: [],
 			}
 		},
 		onLoad() {
 			this.getData();
 		},
 		methods: {
+			search(){
+				uni.navigateTo({
+					url:'../search/search'
+				})
+			},
 			async getData() {
 				let quoteList = await this.$api.quoteList();
 				let list = quoteList.list;
+				let promiseQuotes = [];
+				let promiseIncomes = [];
 				for (let i = 0; i < list.length; i++) {
 					let symbol = list[i].symbol;
-					let quote = await this.$api.quote(symbol);
-					let income = await this.$api.income(symbol);
+					promiseQuotes.push(this.$api.quote(symbol));
+					promiseIncomes.push(this.$api.income(symbol))
+				}
+				//并发20个请求
+				let [quotes, incomes] = await Promise.all([Promise.all(promiseQuotes), Promise.all(promiseIncomes)]);
+
+				for (let i = 0; i < list.length; i++) {
 					//计算近4个季度扣除非经常性损益后的净利润和
 					let pro_new = 0;
 					let pro_old = 0;
-					for (let j = 0; j < income.list.length; j++) {
-						if(j>3){
-							pro_old += income.list[j].net_profit_after_nrgal_atsolc[0];
-						}else{
-							pro_new += income.list[j].net_profit_after_nrgal_atsolc[0];
+					for (let j = 0; j < incomes[i].list.length; j++) {
+						if (j > 3) {
+							pro_old += incomes[i].list[j].net_profit_after_nrgal_atsolc[0];
+						} else {
+							pro_new += incomes[i].list[j].net_profit_after_nrgal_atsolc[0];
 						}
 					}
 					//计算PE(avg)
-					let pe_avg = (quote.quote.pe_forecast+quote.quote.pe_lyr+quote.quote.pe_ttm)/3;
+					let pe_avg = (quotes[i].quote.pe_forecast + quotes[i].quote.pe_lyr + quotes[i].quote.pe_ttm) / 3;
 					//计算i(pro)
-					let i_pro = (pro_new-pro_old)/Math.abs(pro_old);
+					let i_pro = (pro_new - pro_old) / Math.abs(pro_old);
 					//计算PEG
 					let peg = 0;
-					if(i_pro>0){
-						peg = pe_avg/(i_pro*100)
-					}else{
-						peg = pe_avg/(1-i_pro)
+					if (i_pro > 0) {
+						peg = pe_avg / (i_pro * 100)
+					} else {
+						peg = pe_avg / (1 - i_pro)
 					}
-					if(peg>1){
-						list[i].assessment='高估';
-					}else if(peg==1){
-						list[i].assessment='合理';
-					}else {
-						list[i].assessment='低估';
+					if (peg > 1) {
+						list[i].assessment = '高估';
+					} else if (peg == 1) {
+						list[i].assessment = '合理';
+					} else {
+						list[i].assessment = '低估';
 					}
 					list[i].peg = peg.toFixed(2);
 				}
