@@ -6,7 +6,7 @@
 				"navigationBarTitleText": "股票估值助手"
 			}
 		}
-	],
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

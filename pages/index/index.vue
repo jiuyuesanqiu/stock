@@ -7,31 +7,29 @@
 				<view class="pl-3" style="width: 33.33%;display: inline-block;text-align: center;">高/低估</view>
 			</view>
 			<view class="whCenter border-bottom1" style="color: #999999;">
-				<text class="whCenter" style="height: 60upx;font-size: 26upx;">数据更新于<text>06-20 22:26</text></text>
+				<text class="whCenter" style="height: 60upx;font-size: 26upx;">数据更新于<text>2019年6月24日</text></text>
 			</view>
 		</view>
 
 		<view class="" style="padding-top: 132upx;">
-			<view class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in tableList" :key="index" style="background: #fff;color: #333333;font-weight: bold;">
+			<view class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in quoteList" :key="index" style="background: #fff;color: #333333;font-weight: bold;">
 				<view class="wCenter hFlex pl-5" style="flex: 1;font-size: 30upx;align-items: flex-start;height: 100upx;line-height: 40upx;">
 					<view class="hCenter" style="font-size: 34upx;color: #333333;">{{item.name}}</view>
-					<view class="hCenter" style="font-size: 24upx;color: #a3a3a3;">{{item.number}}</view>
+					<view class="hCenter" style="font-size: 24upx;color: #a3a3a3;">{{item.symbol}}</view>
 				</view>
-				<view v-if="item.peg<1" class="hCenter pr-5" style="flex: 1;color: #E93030;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
-				<view v-else class="hCenter pr-5" style="flex: 1;color: #009900;font-size: 36upx;justify-content: flex-end;">{{item.currentPrice}}</view>
+				<view v-if="item.peg<1" class="hCenter pr-5" style="flex: 1;color: #E93030;font-size: 36upx;justify-content: flex-end;">{{item.current}}</view>
+				<view v-else class="hCenter pr-5" style="flex: 1;color: #009900;font-size: 36upx;justify-content: flex-end;">{{item.current}}</view>
 				<view class="whCenter" style="flex: 1;font-size: 36upx;">
-					<view v-if="item.peg<1" style="color:#E93030">低估</view>
-					<view v-else-if="item.peg==1">合理</view>
-					<view v-else style="color: #009900;">高估</view>
+					<view>{{item.assessment}}({{item.peg}})</view>
 				</view>
 			</view>
 		</view>
-		
+
 		<view class="whCenter hFlex pt-5 pb-1" style="color: #ADAEAA;line-height: 44upx;background-color: #F8F8F8;font-size: 24upx;">
 			<p>— 数据由A股估值分析团队整理提供 —</p>
 			<p>估值数据仅供参考，不构成任何投资建议，投资需谨慎。</p>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -39,82 +37,63 @@
 	export default {
 		data() {
 			return {
-				titles:['股票代码','股票名称','当前价格','PEG','是否低估'],
-				tableList:[{
-					number: '601099.SH',
-					name:'太平洋',
-					currentPrice:3.46,
-					peg:0.0022,
-					isLow:'是'
-				},{
-					number:'600519.SH',
-					name:'贵州茅台',
-					currentPrice:913.00,
-					peg:0.9116,
-					isLow:'是'
-				},{
-					number:'300775.SZ',
-					name:'三角防务',
-					currentPrice:32.76,
-					peg:0,
-					isLow:'是'
-				},{
-					number:'600518.SH',
-					name:'ST康美',
-					currentPrice:3.05,
-					peg:-0.8077,
-					isLow:'是'
-				},{
-					number:'000651.SZ',
-					name:'格力电器',
-					currentPrice:51.16,
-					peg:0.7387,
-					isLow:'是'
-				},{
-					number:'000063.SZ',
-					name:'中兴通讯',
-					currentPrice:30.28,
-					peg:0.6642,
-					isLow:'是'
-				},{
-					number:'002049.SZ',
-					name:'紫光国微',
-					currentPrice:42.00,
-					peg:2.9038,
-					isLow:'是'
-				},{
-					number:'000725.SZ',
-					name:'京东方A',
-					currentPrice:3.39,
-					peg:-1.1392,
-					isLow:'是'
-				},{
-					number:'002842.SZ',
-					name:'翔鹭钨业',
-					currentPrice:17.79,
-					peg:0.8117,
-					isLow:'是'
-				},{
-					number:'002115.SZ',
-					name:'三维通信',
-					currentPrice:12.47,
-					peg:0.0810,
-					isLow:'是'
-				}],
+				titles: ['股票代码', '股票名称', '当前价格', 'PEG', '是否低估'],
+				quoteList:[],
 			}
 		},
-		onLoad(){
-			
+		onLoad() {
+			this.getData();
+		},
+		methods: {
+			async getData() {
+				let quoteList = await this.$api.quoteList();
+				let list = quoteList.list;
+				for (let i = 0; i < list.length; i++) {
+					let symbol = list[i].symbol;
+					let quote = await this.$api.quote(symbol);
+					let income = await this.$api.income(symbol);
+					//计算近4个季度扣除非经常性损益后的净利润和
+					let pro_new = 0;
+					let pro_old = 0;
+					for (let j = 0; j < income.list.length; j++) {
+						if(j>3){
+							pro_old += income.list[j].net_profit_after_nrgal_atsolc[0];
+						}else{
+							pro_new += income.list[j].net_profit_after_nrgal_atsolc[0];
+						}
+					}
+					//计算PE(avg)
+					let pe_avg = (quote.quote.pe_forecast+quote.quote.pe_lyr+quote.quote.pe_ttm)/3;
+					//计算i(pro)
+					let i_pro = (pro_new-pro_old)/Math.abs(pro_old);
+					//计算PEG
+					let peg = 0;
+					if(i_pro>0){
+						peg = pe_avg/(i_pro*100)
+					}else{
+						peg = pe_avg/(1-i_pro)
+					}
+					if(peg>1){
+						list[i].assessment='高估';
+					}else if(peg==1){
+						list[i].assessment='合理';
+					}else {
+						list[i].assessment='低估';
+					}
+					list[i].peg = peg.toFixed(2);
+				}
+				this.quoteList = list;
+			}
 		}
 	}
 </script>
 
 <style>
-	.page{
+	.page {
 		background-color: #FFF;
 	}
-	.border-bottom1{
+
+	.border-bottom1 {
 		border-bottom: 1upx solid #F3F3F3;
 	}
-		
 </style>
