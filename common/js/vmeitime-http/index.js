@@ -67,7 +67,7 @@ const quoteList = async (page = 1, size = 10, order = 'asc', orderby = 'code') =
  * 
  */
 const search = (code)=>{
-	return http.get(`https://xueqiu.com/stock/search.json?code=${code}&size=5&page=1`,{},{
+	return http.get(`https://xueqiu.com/stock/search.json?code=${code}&size=50&page=1`,{},{
 		header: {
 			'cookie': cookie
 		}

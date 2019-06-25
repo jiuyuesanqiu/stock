@@ -10,6 +10,10 @@
             "path" : "pages/search/search",
             "style" : {}
         }
+        ,{
+            "path" : "pages/detail/detail",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
