@@ -26,6 +26,8 @@
 					<view>{{item.assessment}}({{item.peg}})</view>
 				</view>
 			</view>
+			<button @tap="previousPage">上一页</button>
+			<button @tap="nextPage">下一页</button>
 		</view>
 
 		<view class="whCenter hFlex pt-5 pb-1" style="color: #ADAEAA;line-height: 44upx;background-color: #F8F8F8;font-size: 24upx;">
@@ -41,19 +43,33 @@
 			return {
 				titles: ['股票代码', '股票名称', '当前价格', 'PEG', '是否低估'],
 				quoteList: [],
+				pageSize: 1
 			}
 		},
 		onLoad() {
-			this.getData();
+			this.getData(this.pageSize);
 		},
 		methods: {
-			search(){
+			/**
+			 * 上一页
+			 */
+			previousPage() {
+
+			},
+			/**
+			 * 下一页
+			 */
+			nextPage() {
+				this.pageSize++;
+				this.getData(this.pageSize);
+			},
+			search() {
 				uni.navigateTo({
-					url:'../search/search'
+					url: '../search/search'
 				})
 			},
-			async getData() {
-				let quoteList = await this.$api.quoteList();
+			async getData(pageSize) {
+				let quoteList = await this.$api.quoteList(pageSize);
 				let list = quoteList.list;
 				let promiseQuotes = [];
 				let promiseIncomes = [];
@@ -96,7 +112,7 @@
 					}
 					list[i].peg = peg.toFixed(2);
 				}
-				this.quoteList = list;
+				this.quoteList = this.quoteList.concat(list);
 			}
 		}
 	}
