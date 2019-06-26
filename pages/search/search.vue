@@ -32,7 +32,7 @@
 					let searchData = await this.$api.search(this.searchText);
 					//过滤沪深的股票
 					let filterData = searchData.data.stocks.filter((value)=>{
-						return value.code.indexOf('SH')!=-1 || value.code.indexOf('SZ')!=-1;
+						return value.ind_name !='' && (value.code.indexOf('SH')!=-1 || value.code.indexOf('SZ')!=-1);
 					})
 					this.searchData = filterData;
 				}
