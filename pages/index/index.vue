@@ -15,7 +15,7 @@
 		</view>
 
 		<view class="" style="padding-top: 132upx;">
-			<view class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in quoteList" :key="index" style="background: #fff;color: #333333;font-weight: bold;">
+			<view @tap="detail(item.symbol)" class="whCenter ml-2 pr-2 border-bottom1" v-for="(item,index) in quoteList" :key="index" style="background: #fff;color: #333333;font-weight: bold;">
 				<view class="wCenter hFlex pl-5" style="flex: 1;font-size: 30upx;align-items: flex-start;height: 100upx;line-height: 40upx;">
 					<view class="hCenter" style="font-size: 34upx;color: #333333;">{{item.name}}</view>
 					<view class="hCenter" style="font-size: 24upx;color: #a3a3a3;">{{item.symbol}}</view>
@@ -50,6 +50,11 @@
 			this.getData(this.pageSize);
 		},
 		methods: {
+			detail(symbol){
+				uni.navigateTo({
+					url:`../detail/detail?symbol=${symbol}`
+				})
+			},
 			/**
 			 * 上一页
 			 */
