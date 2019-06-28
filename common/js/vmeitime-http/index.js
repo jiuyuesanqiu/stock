@@ -74,6 +74,18 @@ const search = (code)=>{
 	})
 }
 
+/**
+ * 获取K线图
+ */
+const keyline = (stockCode)=>{
+	let begin = new Date().getTime()- 6 * 365 * 24 * 60 * 60 *1000;
+	let end = new Date().getTime();
+	return http.get(`/v5/stock/chart/kline.json?symbol=${stockCode}&begin=${begin}&end=${end}&period=day&type=before&indicator=kline`,{},{
+		header: {
+			'cookie': cookie
+		}
+	})
+}
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 	income, //获取单只股票利润表

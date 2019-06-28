@@ -108,7 +108,7 @@
 				})
 			},
 			async getData(pageSize) {
-				let list = arr.slice(pageSize*10-10,pageSize*10);
+				let list = arr.slice(pageSize*15-15,pageSize*15);
 				// let quoteList = await this.$api.quoteList(pageSize);
 				// let list = quoteList.list;
 				let items = [];
@@ -117,7 +117,7 @@
 				for (let i = 0; i < list.length; i++) {
 					let symbol = list[i];
 					promiseQuotes.push(this.$api.quote(symbol));
-					promiseIncomes.push(this.$api.income(symbol))
+					promiseIncomes.push(this.$api.income(symbol));
 				}
 				//并发20个请求
 				let [quotes, incomes] = await Promise.all([Promise.all(promiseQuotes), Promise.all(promiseIncomes)]);
