@@ -1,18 +1,26 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "股票估值助手"
+				"navigationBarTitleText": "A股估值表"
+			}
+		}, {
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
+		}, {
+			"path": "pages/detail/detail",
+			"style": {
+				"navigationBarTitleText": "个股详情"
 			}
 		}
-        ,{
-            "path" : "pages/search/search",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/detail/detail",
-            "style" : {}
+	    ,{
+            "path" : "pages/formula/formula",
+            "style" : {
+				"navigationBarTitleText": "计算公式"
+			}
         }
     ],
 	"globalStyle": {

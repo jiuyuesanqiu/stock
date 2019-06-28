@@ -26,14 +26,13 @@
 					<view>{{item.assessment}}({{item.peg}})</view>
 				</view>
 			</view>
-			<button @tap="previousPage">上一页</button>
-			<button @tap="nextPage">下一页</button>
 		</view>
 
 		<view class="whCenter hFlex pt-5 pb-1" style="color: #ADAEAA;line-height: 44upx;background-color: #F8F8F8;font-size: 24upx;">
 			<p>— 数据由A股估值分析团队整理提供 —</p>
 			<p>估值数据仅供参考，不构成任何投资建议，投资需谨慎。</p>
 		</view>
+		<view class="cu-load" :class="!isLoad?'loading':'over'"></view>
 	</view>
 </template>
 
@@ -43,23 +42,23 @@
 			return {
 				titles: ['股票代码', '股票名称', '当前价格', 'PEG', '是否低估'],
 				quoteList: [],
-				pageSize: 1
+				pageSize: 1,
+				isLoad:false
 			}
 		},
 		onLoad() {
 			this.getData(this.pageSize);
+		},
+		onReachBottom() {
+			if (!this.isLoad) {
+				this.nextPage();
+			}
 		},
 		methods: {
 			detail(symbol){
 				uni.navigateTo({
 					url:`../detail/detail?symbol=${symbol}`
 				})
-			},
-			/**
-			 * 上一页
-			 */
-			previousPage() {
-
 			},
 			/**
 			 * 下一页
