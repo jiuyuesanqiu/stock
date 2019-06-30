@@ -40,7 +40,13 @@
 	export default {
 		data() {
 			return {
-				stockData: {}
+				stockData: {
+					name:'',
+					symbol:'',
+					current:'',
+					peg:'',
+					assessment:'',
+				}
 			}
 		},
 		onLoad(option) {
