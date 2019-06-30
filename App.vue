@@ -40,5 +40,7 @@
 		flex-direction: row;
 	}
 	
-	
+	.bb + .bb{
+		border-top: 1px solid #b2b2b2;
+	}
 </style>

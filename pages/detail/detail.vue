@@ -1,31 +1,36 @@
 <template>
 	<view>
-		<view class="d-flex justify-around">
-			<view>
-				股票代码
+		<view class="flex text-center py-2 bb">
+			<view style="width: 25%;">
+				股票名称
 			</view>
-			<view>
-				股票价格
+			<view style="width: 25%;">
+				当前价格
 			</view>
-			<view>
-				估值
-			</view>
-			<view>
+			<view style="width: 25%;">
 				PEG
 			</view>
-		</view>
-		<view class="d-flex justify-around">
-			<view>
-				{{stockData.symbol}}
+			<view style="width: 25%;">
+				估值
 			</view>
-			<view>
+		</view>
+		<view class="flex text-center py-2 bb">
+			<view style="width: 25%;">
+				<view>
+					{{stockData.name}}
+				</view>
+				<view class="text-gray">
+					{{stockData.symbol}}
+				</view>
+			</view>
+			<view style="width: 25%;" class="d-flex justify-center align-items-center">
 				{{stockData.current}}
 			</view>
-			<view>
-				{{stockData.assessment}}
-			</view>
-			<view>
+			<view style="width: 25%;" class="d-flex justify-center align-items-center">
 				{{stockData.peg}}
+			</view>
+			<view style="width: 25%;" class="d-flex justify-center align-items-center" :style="{color:stockData.peg<1?'green':'red'}">
+				{{stockData.assessment}}
 			</view>
 		</view>
 	</view>
@@ -35,7 +40,7 @@
 	export default {
 		data() {
 			return {
-				stockData:{}
+				stockData: {}
 			}
 		},
 		onLoad(option) {
@@ -43,7 +48,7 @@
 		},
 		methods: {
 			async computed(symbol) {
-				let [quote,income] = await Promise.all([this.$api.quote(symbol),this.$api.income(symbol)])
+				let [quote, income] = await Promise.all([this.$api.quote(symbol), this.$api.income(symbol)])
 				let stockData = {};
 				//计算近4个季度扣除非经常性损益后的净利润和
 				let pro_new = 0;
@@ -76,6 +81,7 @@
 				stockData.current = quote.quote.current;
 				stockData.symbol = quote.quote.symbol;
 				stockData.peg = peg.toFixed(2);
+				stockData.name = income.quote_name;
 				this.stockData = stockData;
 			}
 		}
