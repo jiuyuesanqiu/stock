@@ -7,7 +7,7 @@
 			</view>
 		</view>
 		<view class="px-5" style="padding-top: 100upx;">
-			<view class="flex text-center py-2">
+			<view class="flex text-center py-2 bb">
 				<view style="width: 25%;">
 					股票名称
 				</view>
@@ -36,7 +36,7 @@
 				<view style="width: 25%;" class="d-flex justify-center align-items-center">
 					{{item.peg}}
 				</view>
-				<view style="width: 25%;" class="d-flex justify-center align-items-center">
+				<view style="width: 25%;" class="d-flex justify-center align-items-center" :style="{color:item.peg<1?'green':'red'}">
 					{{item.assessment}}
 				</view>
 			</view>
@@ -147,7 +147,4 @@
 </script>
 
 <style>
-	.bb + .bb{
-		border-top: 1px solid #b2b2b2;
-	}
 </style>
