@@ -60,8 +60,28 @@
 						pro_new += income.list[j].net_profit_after_nrgal_atsolc[0];
 					}
 				}
+				let pe_forecast = quote.quote.pe_forecast;
+				let pe_lyr = quote.quote.pe_lyr;
+				let pe_ttm = quote.quote.pe_ttm;
+				if (pe_forecast < 0) {
+					pe_forecast = 1000;
+				} else if (pe_forecast > 500) {
+					pe_forecast = 500;
+				}
+
+				if (pe_lyr < 0) {
+					pe_lyr = 1000;
+				} else if (pe_lyr > 500) {
+					pe_lyr = 500;
+				}
+				if (pe_ttm < 0) {
+					pe_ttm = 1000;
+				} else if (pe_ttm > 500) {
+					pe_ttm = 500;
+				}
+
 				//计算PE(avg)
-				let pe_avg = (quote.quote.pe_forecast + quote.quote.pe_lyr + quote.quote.pe_ttm) / 3;
+				let pe_avg = (pe_forecast + pe_lyr + pe_ttm) / 3;
 				//计算i(pro)
 				let i_pro = (pro_new - pro_old) / Math.abs(pro_old);
 				//计算PEG
